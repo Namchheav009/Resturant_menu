@@ -1,0 +1,15 @@
+﻿@model Booking
+@{
+    ViewData["Title"] = "Success";
+}
+
+<div class="details-panel" style="grid-template-columns:1fr;">
+    <div>
+        <h4>✅ Booking Saved</h4>
+        <p><b>Name:</b> @Model.CustomerName</p>
+        <p><b>Table:</b> @Model.TableNumber</p>
+        <p><b>Time:</b> @Model.CreatedAt</p>
+
+        <a class="btn btn-book" asp-controller="Menu" asp-action="Index">Back to Menu</a>
+    </div>
+</div>

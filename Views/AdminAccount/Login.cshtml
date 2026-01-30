@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="details-panel" style="grid-template-columns:1fr; max-width:520px;">
+    <div>
+        <h4>Admin Login</h4>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="text-danger mb-2">@ViewBag.Error</div>
+        }
+
+        <form method="post">
+            <div class="mb-2">
+                <label class="form-label">Username</label>
+                <input name="username" class="form-control" placeholder="userAdmin" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input name="password" type="password" class="form-control" required />
+            </div>
+
+            <button class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>

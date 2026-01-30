@@ -1,0 +1,24 @@
+﻿@model List<MenuItem>
+@{
+    ViewData["Title"] = "Menu";
+}
+
+<div class="menu-grid">
+@foreach (var item in Model)
+{
+    <a class="menu-card text-decoration-none text-dark"
+       asp-controller="Menu"
+       asp-action="Details"
+       asp-route-id="@item.Id">
+        <div class="food-circle">
+            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+            {
+                <img src="@item.ImageUrl" alt="@item.Name" />
+            }
+        </div>
+
+        <div class="menu-title">@item.Name</div>
+        <div class="menu-desc">@item.Description</div>
+    </a>
+}
+</div>

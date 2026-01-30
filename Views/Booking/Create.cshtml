@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Booking";
+    int? menuItemId = ViewBag.MenuItemId as int?;
+}
+
+<div class="details-panel" style="grid-template-columns:1fr;">
+    <div>
+        <h4>Booking</h4>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="text-danger mb-2">@ViewBag.Error</div>
+        }
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="menuItemId" value="@menuItemId" />
+
+            <div class="mb-2">
+                <label class="form-label">Customer Name</label>
+                <input name="customerName" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Table Number</label>
+                <input name="tableNumber" type="number" class="form-control" min="1" max="500" required />
+            </div>
+
+            <button class="btn btn-book">Submit</button>
+            <a class="btn btn-outline-dark ms-2" asp-controller="Menu" asp-action="Index">Back</a>
+        </form>
+    </div>
+</div>

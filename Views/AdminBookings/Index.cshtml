@@ -1,0 +1,35 @@
+﻿@model List<Booking>
+@{
+    ViewData["Title"] = "All Transactions";
+}
+
+<div class="details-panel" style="grid-template-columns:1fr;">
+    <div>
+        <h4>All Transactions (Bookings)</h4>
+        <p class="text-muted">Only admin can view this page.</p>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Table</th>
+                    <th>Menu Item</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.Id</td>
+                    <td>@b.CustomerName</td>
+                    <td>@b.TableNumber</td>
+                    <td>@(b.MenuItem?.Name ?? "-")</td>
+                    <td>@b.CreatedAt</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

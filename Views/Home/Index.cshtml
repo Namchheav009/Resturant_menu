@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    var adminName = Context.Session.GetString("AdminName");
+}
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+<div class="home-wrap">
+    <div class="home-card">
+        <div class="home-badge">
+            <span class="dot"></span>
+            <span>Golden Leaf Restaurant</span>
+        </div>
+
+        <h1 class="home-title">Welcome to Golden Leaf</h1>
+        <p class="home-subtitle">
+            Explore our menu and book your table in seconds.
+        </p>
+
+        <div class="home-actions">
+            <a class="btn btn-primary home-btn"
+               asp-controller="Menu" asp-action="Index">
+                View Menu
+            </a>
+
+            <a class="btn btn-success home-btn"
+               asp-controller="Booking" asp-action="Create">
+                Book Now
+            </a>
+
+            @if (!string.IsNullOrWhiteSpace(adminName))
+            {
+                <a class="btn btn-dark home-btn"
+                   asp-controller="AdminBookings" asp-action="Index">
+                    Admin Panel
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-outline-light home-btn"
+                   asp-controller="AdminAccount" asp-action="Login">
+                    Admin Login
+                </a>
+            }
+        </div>
+
+        <div class="home-note">
+            <span>Tip:</span> Customers only need <b>Name</b> + <b>Table Number</b>.
+        </div>
+    </div>
+</div>

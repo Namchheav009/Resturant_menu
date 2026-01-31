@@ -3342,23 +3342,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\EBM\\.nuget\\packages\\": {},
+    "D:\\Viusal Studio 2022\\VisualStudioSharedComponnets\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\django\\Resturant_menu\\Resturant_Menu.csproj",
+      "projectUniqueName": "D:\\test-asp\\Resturant_menu\\Resturant_Menu.csproj",
       "projectName": "Resturant_Menu",
-      "projectPath": "D:\\django\\Resturant_menu\\Resturant_Menu.csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\django\\Resturant_menu\\obj\\",
+      "projectPath": "D:\\test-asp\\Resturant_menu\\Resturant_Menu.csproj",
+      "packagesPath": "C:\\Users\\EBM\\.nuget\\packages\\",
+      "outputPath": "D:\\test-asp\\Resturant_menu\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "D:\\Viusal Studio 2022\\VisualStudioSharedComponnets\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\EBM\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

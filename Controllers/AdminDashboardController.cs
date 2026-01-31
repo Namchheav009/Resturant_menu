@@ -2,14 +2,21 @@ using Microsoft.AspNetCore.Mvc;
 using Resturant_Menu.Data;
 using Resturant_Menu.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace Resturant_Menu.Controllers
 {
     public class AdminDashboardController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AdminDashboardController(ApplicationDbContext db) => _db = db;
+        public AdminDashboardController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        {
+            _db = db;
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         public IActionResult Index()
         {
@@ -101,10 +108,16 @@ namespace Resturant_Menu.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateMenuItem(MenuItem menuItem)
+        public async Task<IActionResult> CreateMenuItem(MenuItem menuItem, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
+                // Handle image upload
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    menuItem.ImageUrl = await SaveImageAsync(ImageFile);
+                }
+
                 _db.MenuItems.Add(menuItem);
                 _db.SaveChanges();
                 return RedirectToAction("MenuItems");
@@ -123,10 +136,27 @@ namespace Resturant_Menu.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditMenuItem(MenuItem menuItem)
+        public async Task<IActionResult> EditMenuItem(MenuItem menuItem, IFormFile ImageFile, string ExistingImageUrl)
         {
             if (ModelState.IsValid)
             {
+                // Handle image upload
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    // Delete old image if exists
+                    if (!string.IsNullOrEmpty(menuItem.ImageUrl))
+                    {
+                        DeleteImage(menuItem.ImageUrl);
+                    }
+                    
+                    menuItem.ImageUrl = await SaveImageAsync(ImageFile);
+                }
+                else if (!string.IsNullOrEmpty(ExistingImageUrl))
+                {
+                    // Keep existing image if no new file uploaded
+                    menuItem.ImageUrl = ExistingImageUrl;
+                }
+
                 _db.MenuItems.Update(menuItem);
                 _db.SaveChanges();
                 return RedirectToAction("MenuItems");
@@ -200,6 +230,48 @@ namespace Resturant_Menu.Controllers
                 _db.SaveChanges();
             }
             return RedirectToAction("Admins");
+        }
+
+        // Helper method to save image
+        private async Task<string> SaveImageAsync(IFormFile imageFile)
+        {
+            // Create unique filename
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            
+            // Set upload path
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "menu");
+            
+            // Create directory if it doesn't exist
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            // Full file path
+            string filePath = Path.Combine(uploadPath, fileName);
+
+            // Save file
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            // Return relative path for database
+            return "/images/menu/" + fileName;
+        }
+
+        // Helper method to delete image
+        private void DeleteImage(string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl))
+                return;
+
+            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
+            
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
         }
     }
 }

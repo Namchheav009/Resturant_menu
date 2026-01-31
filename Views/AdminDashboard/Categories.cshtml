@@ -2,40 +2,193 @@
 @{
     ViewData["Title"] = "Manage Categories";
 }
+<link rel="stylesheet" href="~/css/categories-manage.css" asp-append-version="true" />
 
-<div class="container mt-4">
-    <h1 class="mb-4">Manage Categories</h1>
-
-    <a href="@Url.Action("CreateCategory", "AdminDashboard")" class="btn btn-primary mb-3">Add New Category</a>
-
-    <div class="card card-ui">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-dark table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var category in Model)
-                        {
-                            <tr>
-                                <td>@category.Id</td>
-                                <td>@category.Name</td>
-                                <td>
-                                    <a href="@Url.Action("EditCategory", "AdminDashboard", new { id = category.Id })" class="btn btn-sm btn-warning">Edit</a>
-                                    <a href="@Url.Action("DeleteCategory", "AdminDashboard", new { id = category.Id })" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+<div class="manage-wrapper">
+    <div class="manage-container">
+        <!-- Header -->
+        <div class="manage-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <a href="@Url.Action("Index", "AdminDashboard")" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <h1 class="page-title">Menu Categories</h1>
+                    <p class="page-subtitle">Organize your menu into sections</p>
+                </div>
+                <a href="@Url.Action("CreateCategory", "AdminDashboard")" class="btn-add">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Add New Category</span>
+                </a>
             </div>
         </div>
-    </div>
 
-    <a href="@Url.Action("Index", "AdminDashboard")" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count</span>
+                    <span class="stat-label">Total Categories</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Grid -->
+        @if (Model.Any())
+        {
+            <div class="categories-grid">
+                @foreach (var category in Model)
+                {
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <rect x="4" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <rect x="18" y="4" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <rect x="4" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <rect x="18" y="18" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="category-content">
+                            <div class="category-header">
+                                <h3 class="category-name">@category.Name</h3>
+                                <span class="category-id">#@category.Id</span>
+                            </div>
+                            
+                            <div class="category-stats">
+                                <div class="stat-item">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M2 4H14M2 8H14M2 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    <span>@(category.MenuItems?.Count ?? 0) items</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category-actions">
+                            <a href="@Url.Action("EditCategory", "AdminDashboard", new { id = category.Id })" 
+                               class="btn-action btn-edit"
+                               title="Edit Category">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                    <path d="M12 2L16 6M2 16L6 12L14 4L18 8L10 16L2 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Edit</span>
+                            </a>
+                            <button onclick="confirmDelete(@category.Id, '@category.Name', @(category.MenuItems?.Count ?? 0))" 
+                                    class="btn-action btn-delete"
+                                    title="Delete Category">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                    <path d="M3 4H15M7 4V3C7 2.44772 7.44772 2 8 2H10C10.5523 2 11 2.44772 11 3V4M5 4V15C5 15.5523 5.44772 16 6 16H12C12.5523 16 13 15.5523 13 15V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M7 8V12M11 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <rect x="12" y="12" width="24" height="24" rx="4" stroke="currentColor" stroke-width="3"/>
+                        <rect x="44" y="12" width="24" height="24" rx="4" stroke="currentColor" stroke-width="3"/>
+                        <rect x="12" y="44" width="24" height="24" rx="4" stroke="currentColor" stroke-width="3"/>
+                        <rect x="44" y="44" width="24" height="24" rx="4" stroke="currentColor" stroke-width="3"/>
+                    </svg>
+                </div>
+                <h2 class="empty-title">No Categories Yet</h2>
+                <p class="empty-description">Start organizing your menu by creating your first category</p>
+                <a href="@Url.Action("CreateCategory", "AdminDashboard")" class="btn-empty">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Create First Category</span>
+                </a>
+            </div>
+        }
+    </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>
+                    <path d="M24 16V26M24 32H24.02" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">Delete Category?</h2>
+            <p class="modal-description">
+                Are you sure you want to delete the category "<span id="categoryName"></span>"?
+                <span id="itemWarning" style="display: none;">
+                    <br/><br/>
+                    <strong>Warning:</strong> This category contains <span id="itemCount"></span> menu item(s). 
+                    Deleting it may affect these items.
+                </span>
+            </p>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="btn-modal-cancel">Cancel</button>
+            <a href="#" id="confirmDeleteBtn" class="btn-modal-delete">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 4H15M7 4V3C7 2.44772 7.44772 2 8 2H10C10.5523 2 11 2.44772 11 3V4M5 4V15C5 15.5523 5.44772 16 6 16H12C12.5523 16 13 15.5523 13 15V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Delete Category
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(categoryId, categoryName, itemCount) {
+        document.getElementById('categoryName').textContent = categoryName;
+        document.getElementById('confirmDeleteBtn').href = '@Url.Action("DeleteCategory", "AdminDashboard")?id=' + categoryId;
+        
+        // Show warning if category has items
+        const warning = document.getElementById('itemWarning');
+        if (itemCount > 0) {
+            document.getElementById('itemCount').textContent = itemCount;
+            warning.style.display = 'inline';
+        } else {
+            warning.style.display = 'none';
+        }
+        
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>

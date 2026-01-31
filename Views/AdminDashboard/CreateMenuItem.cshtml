@@ -1,55 +1,306 @@
 @model MenuItem
 @{
     ViewData["Title"] = ViewContext.RouteData.Values["action"]?.ToString() == "CreateMenuItem" ? "Create Menu Item" : "Edit Menu Item";
+    var isEdit = ViewContext.RouteData.Values["action"]?.ToString() == "EditMenuItem";
 }
+<link rel="stylesheet" href="~/css/dashboard/createmenuitem.css" asp-append-version="true" />
 
-<div class="container mt-4">
-    <h1 class="mb-4">@ViewData["Title"]</h1>
+<div class="form-wrapper">
+    <div class="form-container">
+        <!-- Header -->
+        <div class="form-header">
+            <a href="@Url.Action("MenuItems", "AdminDashboard")" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Back to Menu Items</span>
+            </a>
+            <h1 class="form-title">@ViewData["Title"]</h1>
+            <p class="form-subtitle">@(isEdit ? "Update menu item details and availability" : "Add a new dish to your restaurant menu")</p>
+        </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card card-ui">
-                <div class="card-body">
-                    <form method="post">
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input name="Name" class="form-control input-ui" value="@Model?.Name" required />
+        <!-- Form Card -->
+        <div class="form-card">
+            <form method="post" enctype="multipart/form-data" id="menuItemForm">
+                <div class="form-grid">
+                    <!-- Left Column -->
+                    <div class="form-column">
+                        <!-- Name -->
+                        <div class="form-group">
+                            <label class="form-label" for="name">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M2 4H14M2 8H14M2 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Dish Name
+                            </label>
+                            <input 
+                                id="name"
+                                name="Name" 
+                                type="text"
+                                class="form-input" 
+                                placeholder="e.g., Grilled Salmon" 
+                                value="@Model?.Name" 
+                                required />
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="Description" class="form-control input-ui" rows="3">@Model?.Description</textarea>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label class="form-label" for="description">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M5 6H11M5 9H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Description
+                            </label>
+                            <textarea 
+                                id="description"
+                                name="Description" 
+                                class="form-textarea" 
+                                rows="4"
+                                placeholder="Describe your dish, ingredients, and preparation style...">@Model?.Description</textarea>
+                            <span class="form-hint">Optional: Help customers understand what makes this dish special</span>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Price</label>
-                            <input name="Price" type="number" step="0.01" class="form-control input-ui" value="@Model?.Price" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Image URL</label>
-                            <input name="ImageUrl" class="form-control input-ui" value="@Model?.ImageUrl" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Category</label>
-                            <select name="CategoryId" class="form-control input-ui" required>
-                                <option value="">Select Category</option>
-                                @if (ViewBag.Categories != null)
-                                {
-                                    @foreach (var cat in (ViewBag.Categories as List<Category>) ?? new List<Category>())
+
+                        <!-- Price & Category Row -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="price">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M8 5V11M6 7H10M6 9H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Price
+                                </label>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">$</span>
+                                    <input 
+                                        id="price"
+                                        name="Price" 
+                                        type="number" 
+                                        step="0.01" 
+                                        min="0"
+                                        class="form-input with-prefix" 
+                                        placeholder="0.00"
+                                        value="@Model?.Price" 
+                                        required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="category">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Category
+                                </label>
+                                <select 
+                                    id="category"
+                                    name="CategoryId" 
+                                    class="form-select" 
+                                    required>
+                                    <option value="">Choose a category</option>
+                                    @if (ViewBag.Categories != null)
                                     {
-                                        <option value="@cat.Id" selected="@(Model?.CategoryId == cat.Id ? "selected" : null)">@cat.Name</option>
+                                        @foreach (var cat in (ViewBag.Categories as List<Category>) ?? new List<Category>())
+                                        {
+                                            <option value="@cat.Id" selected="@(Model?.CategoryId == cat.Id)">@cat.Name</option>
+                                        }
                                     }
-                                }
-                            </select>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" name="IsAvailable" class="form-check-input" value="true" checked="@Model?.IsAvailable" />
-                            <label class="form-check-label">Is Available</label>
+
+                        <!-- Availability Toggle -->
+                        <div class="form-group">
+                            <div class="toggle-wrapper">
+                                <div class="toggle-header">
+                                    <label class="toggle-label" for="isAvailable">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        Available for ordering
+                                    </label>
+                                    <label class="toggle-switch">
+                                        <input 
+                                            type="checkbox" 
+                                            id="isAvailable"
+                                            name="IsAvailable" 
+                                            value="true" 
+                                            @(Model?.IsAvailable == true || Model == null ? "checked" : "") />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="toggle-description">Enable this to make the dish available for customer orders</p>
+                            </div>
                         </div>
-                        <button class="btn btn-primary w-100">@(ViewContext.RouteData.Values["action"]?.ToString() == "CreateMenuItem" ? "Create" : "Update")</button>
-                    </form>
+                    </div>
+
+                    <!-- Right Column - Image Upload -->
+                    <div class="form-column">
+                        <div class="image-upload-section">
+                            <label class="form-label">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="5.5" cy="6.5" r="1.5" fill="currentColor"/>
+                                    <path d="M2 11L5 8L7 10L11 6L14 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Dish Image
+                            </label>
+                            
+                            <div class="image-upload-area" id="imageUploadArea">
+                                <input 
+                                    type="file" 
+                                    id="imageFile" 
+                                    name="ImageFile" 
+                                    accept="image/*" 
+                                    class="image-input"
+                                    onchange="handleImageSelect(event)" />
+                                
+                                <div class="upload-prompt" id="uploadPrompt">
+                                    <div class="upload-icon">
+                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                            <rect x="8" y="10" width="32" height="28" rx="4" stroke="currentColor" stroke-width="2"/>
+                                            <circle cx="16" cy="18" r="3" fill="currentColor"/>
+                                            <path d="M8 30L16 22L22 28L32 18L40 26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="upload-title">Upload Dish Photo</h3>
+                                    <p class="upload-description">Click to browse or drag and drop</p>
+                                    <p class="upload-hint">PNG, JPG, WEBP up to 5MB</p>
+                                </div>
+
+                                <div class="image-preview" id="imagePreview" style="display: none;">
+                                    <img id="previewImage" src="@Model?.ImageUrl" alt="Preview" />
+                                    <div class="image-overlay">
+                                        <button type="button" class="btn-change-image" onclick="document.getElementById('imageFile').click()">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M14 2L18 6M2 18L6 14L14 6L18 10L10 18L2 18Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            Change Image
+                                        </button>
+                                        <button type="button" class="btn-remove-image" onclick="removeImage()">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Keep existing URL if editing and no new file uploaded -->
+                            @if (isEdit && !string.IsNullOrEmpty(Model?.ImageUrl))
+                            {
+                                <input type="hidden" name="ExistingImageUrl" value="@Model.ImageUrl" />
+                            }
+
+                            <p class="image-note">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7 4V7.5M7 10H7.005" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                High-quality images help customers make better choices
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="@Url.Action("MenuItems", "AdminDashboard")" class="btn-cancel">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-submit">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16 4L7 13L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>@(isEdit ? "Update Menu Item" : "Create Menu Item")</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-
-    <a href="@Url.Action("MenuItems", "AdminDashboard")" class="btn btn-secondary mt-3">Back to Menu Items</a>
 </div>
+
+<script>
+    // Show existing image if in edit mode
+    window.addEventListener('DOMContentLoaded', function() {
+        const existingImageUrl = '@Model?.ImageUrl';
+        if (existingImageUrl) {
+            showImagePreview(existingImageUrl);
+        }
+    });
+
+    function handleImageSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                event.target.value = '';
+                return;
+            }
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                event.target.value = '';
+                return;
+            }
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                showImagePreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function showImagePreview(imageUrl) {
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImage = document.getElementById('previewImage');
+
+        uploadPrompt.style.display = 'none';
+        imagePreview.style.display = 'block';
+        previewImage.src = imageUrl;
+    }
+
+    function removeImage() {
+        const imageInput = document.getElementById('imageFile');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.value = '';
+        uploadPrompt.style.display = 'flex';
+        imagePreview.style.display = 'none';
+    }
+
+    // Drag and drop functionality
+    const uploadArea = document.getElementById('imageUploadArea');
+
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            document.getElementById('imageFile').files = files;
+            handleImageSelect({ target: { files: files } });
+        }
+    });
+</script>

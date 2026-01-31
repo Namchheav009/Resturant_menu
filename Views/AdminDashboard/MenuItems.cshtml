@@ -2,46 +2,234 @@
 @{
     ViewData["Title"] = "Manage Menu Items";
 }
+<link rel="stylesheet" href="~/css/dashboard/menuitem.css" asp-append-version="true" />
 
-<div class="container mt-4">
-    <h1 class="mb-4">Manage Menu Items</h1>
-
-    <a href="@Url.Action("CreateMenuItem", "AdminDashboard")" class="btn btn-primary mb-3">Add New Menu Item</a>
-
-    <div class="card card-ui">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-dark table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Available</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.Name</td>
-                                <td>@item.Price $</td>
-                                <td>@item.Category?.Name</td>
-                                <td>@(item.IsAvailable ? "Yes" : "No")</td>
-                                <td>
-                                    <a href="@Url.Action("EditMenuItem", "AdminDashboard", new { id = item.Id })" class="btn btn-sm btn-warning">Edit</a>
-                                    <a href="@Url.Action("DeleteMenuItem", "AdminDashboard", new { id = item.Id })" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+<div class="manage-wrapper">
+    <div class="manage-container">
+        <!-- Header -->
+        <div class="manage-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <a href="@Url.Action("Index", "AdminDashboard")" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <h1 class="page-title">Menu Items</h1>
+                    <p class="page-subtitle">Manage your restaurant's menu offerings</p>
+                </div>
+                <a href="@Url.Action("CreateMenuItem", "AdminDashboard")" class="btn-add">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Add New Item</span>
+                </a>
             </div>
         </div>
-    </div>
 
-    <a href="@Url.Action("Index", "AdminDashboard")" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 4H17M3 8H17M3 12H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count</span>
+                    <span class="stat-label">Total Items</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count(x => x.IsAvailable)</span>
+                    <span class="stat-label">Available</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count(x => !x.IsAvailable)</span>
+                    <span class="stat-label">Unavailable</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Items Grid -->
+        @if (Model.Any())
+        {
+            <div class="items-grid">
+                @foreach (var item in Model)
+                {
+                    <div class="menu-item-card @(!item.IsAvailable ? "unavailable" : "")">
+                        <div class="item-image">
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" />
+                            }
+                            else
+                            {
+                                <div class="image-placeholder">
+                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                        <rect x="8" y="10" width="32" height="28" rx="4" stroke="currentColor" stroke-width="2"/>
+                                        <circle cx="16" cy="18" r="3" fill="currentColor"/>
+                                        <path d="M8 30L16 22L22 28L32 18L40 26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            }
+                            <div class="item-badges">
+                                @if (item.IsAvailable)
+                                {
+                                    <span class="badge badge-available">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                            <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                        </svg>
+                                        Available
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-unavailable">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                            <circle cx="6" cy="6" r="5" fill="currentColor"/>
+                                        </svg>
+                                        Unavailable
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="item-content">
+                            <div class="item-header">
+                                <h3 class="item-name">@item.Name</h3>
+                                <span class="item-id">#@item.Id</span>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(item.Description))
+                            {
+                                <p class="item-description">@item.Description</p>
+                            }
+                            
+                            <div class="item-details">
+                                <div class="detail-item">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M8 5V8H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    <span class="item-price">$@item.Price.ToString("F2")</span>
+                                </div>
+                                <div class="detail-item">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span class="item-category">@(item.Category?.Name ?? "No Category")</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-actions">
+                                <a href="@Url.Action("EditMenuItem", "AdminDashboard", new { id = item.Id })" class="btn-action btn-edit">
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M12 2L16 6M2 16L6 12L14 4L18 8L10 16L2 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>Edit</span>
+                                </a>
+                                <button onclick="confirmDelete(@item.Id, '@item.Name')" class="btn-action btn-delete">
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M3 4H15M7 4V3C7 2.44772 7.44772 2 8 2H10C10.5523 2 11 2.44772 11 3V4M5 4V15C5 15.5523 5.44772 16 6 16H12C12.5523 16 13 15.5523 13 15V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M7 8V12M11 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <rect x="16" y="20" width="48" height="40" rx="4" stroke="currentColor" stroke-width="3"/>
+                        <circle cx="28" cy="32" r="4" fill="currentColor"/>
+                        <path d="M16 52L28 40L36 48L52 32L64 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 class="empty-title">No Menu Items Yet</h2>
+                <p class="empty-description">Start building your menu by adding your first dish</p>
+                <a href="@Url.Action("CreateMenuItem", "AdminDashboard")" class="btn-empty">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Add First Menu Item</span>
+                </a>
+            </div>
+        }
+    </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>
+                    <path d="M24 16V26M24 32H24.02" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">Delete Menu Item?</h2>
+            <p class="modal-description">Are you sure you want to delete "<span id="itemName"></span>"? This action cannot be undone.</p>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="btn-modal-cancel">Cancel</button>
+            <a href="#" id="confirmDeleteBtn" class="btn-modal-delete">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 4H15M7 4V3C7 2.44772 7.44772 2 8 2H10C10.5523 2 11 2.44772 11 3V4M5 4V15C5 15.5523 5.44772 16 6 16H12C12.5523 16 13 15.5523 13 15V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Delete Item
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(itemId, itemName) {
+        document.getElementById('itemName').textContent = itemName;
+        document.getElementById('confirmDeleteBtn').href = '@Url.Action("DeleteMenuItem", "AdminDashboard")?id=' + itemId;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>

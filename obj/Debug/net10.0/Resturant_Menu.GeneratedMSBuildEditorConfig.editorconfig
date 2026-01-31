@@ -19,113 +19,113 @@ build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v10.0
 build_property.RootNamespace = Resturant_Menu
 build_property.RootNamespace = Resturant_Menu
-build_property.ProjectDir = D:\django\Resturant_menu\
+build_property.ProjectDir = D:\test-asp\Resturant_menu\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\django\Resturant_menu
+build_property.MSBuildProjectDirectory = D:\test-asp\Resturant_menu
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/django/Resturant_menu/Areas/Identity/Pages/_ViewStart.cshtml]
+[D:/test-asp/Resturant_menu/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminAccount/Login.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminAccount/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5BY2NvdW50XExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminBookings/Index.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminBookings/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5Cb29raW5nc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/Admins.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/Admins.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcQWRtaW5zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/Categories.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/Categories.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcQ2F0ZWdvcmllcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/CreateAdmin.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/CreateAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcQ3JlYXRlQWRtaW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/CreateCategory.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/CreateCategory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcQ3JlYXRlQ2F0ZWdvcnkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/CreateMenuItem.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/CreateMenuItem.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcQ3JlYXRlTWVudUl0ZW0uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/EditAdmin.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/EditAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcRWRpdEFkbWluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/EditCategory.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/EditCategory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcRWRpdENhdGVnb3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/EditMenuItem.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/EditMenuItem.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcRWRpdE1lbnVJdGVtLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/Index.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/AdminDashboard/MenuItems.cshtml]
+[D:/test-asp/Resturant_menu/Views/AdminDashboard/MenuItems.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcTWVudUl0ZW1zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Booking/Create.cshtml]
+[D:/test-asp/Resturant_menu/Views/Booking/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Booking/Success.cshtml]
+[D:/test-asp/Resturant_menu/Views/Booking/Success.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xTdWNjZXNzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Home/Index.cshtml]
+[D:/test-asp/Resturant_menu/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Home/Privacy.cshtml]
+[D:/test-asp/Resturant_menu/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Menu/Details.cshtml]
+[D:/test-asp/Resturant_menu/Views/Menu/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Menu/Index.cshtml]
+[D:/test-asp/Resturant_menu/Views/Menu/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Shared/Error.cshtml]
+[D:/test-asp/Resturant_menu/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Shared/_LoginPartial.cshtml]
+[D:/test-asp/Resturant_menu/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/test-asp/Resturant_menu/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/_ViewImports.cshtml]
+[D:/test-asp/Resturant_menu/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/_ViewStart.cshtml]
+[D:/test-asp/Resturant_menu/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/django/Resturant_menu/Views/Shared/_Layout.cshtml]
+[D:/test-asp/Resturant_menu/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-75nx988z4g

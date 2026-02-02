@@ -3,6 +3,29 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 <link rel="stylesheet" href="~/css/dashboard/admin-dashboard.css" asp-append-version="true" />
+<style>
+    @@keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @@keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+</style>
 
 <div class="dashboard-wrapper">
     <div class="dashboard-header">
@@ -11,12 +34,28 @@
                 <h1 class="dashboard-title">Admin Dashboard</h1>
                 <p class="dashboard-subtitle">Golden Leaf Restaurant Management</p>
             </div>
-            <a href="@Url.Action("Logout", "AdminAccount")" class="btn-logout">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M13 3H16C16.5304 3 17.0391 3.21071 17.4142 3.58579C17.7893 3.96086 18 4.46957 18 5V15C18 15.5304 17.7893 16.0391 17.4142 16.4142C17.0391 16.7893 16.5304 17 16 17H13M7 13L3 10M3 10L7 7M3 10H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Logout</span>
-            </a>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="@Url.Action("Notifications")" style="position: relative; text-decoration: none;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    @if ((int)Model.UnreadNotifications > 0)
+                    {
+                        <span data-notification-badge style="position: absolute; top: -8px; right: -8px; background: #ff4757; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">@Model.UnreadNotifications</span>
+                    }
+                    else
+                    {
+                        <span data-notification-badge style="position: absolute; top: -8px; right: -8px; background: #ff4757; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">0</span>
+                    }
+                </a>
+                <a href="@Url.Action("Logout", "AdminAccount")" class="btn-logout">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 3H16C16.5304 3 17.0391 3.21071 17.4142 3.58579C17.7893 3.96086 18 4.46957 18 5V15C18 15.5304 17.7893 16.0391 17.4142 16.4142C17.0391 16.7893 16.5304 17 16 17H13M7 13L3 10M3 10L7 7M3 10H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Logout</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -127,6 +166,24 @@
                             </svg>
                         </a>
 
+                        <a href="@Url.Action("Tables", "AdminDashboard")" class="management-card">
+                            <div class="management-icon" style="background: linear-gradient(135deg, #D4A574, #E8C4A0);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="3" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="13" y="3" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="3" y="13" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="13" y="13" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="management-content">
+                                <h3 class="management-title">Tables</h3>
+                                <p class="management-description">Manage availability status</p>
+                            </div>
+                            <svg class="management-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </a>
+
                         <a href="@Url.Action("Admins", "AdminDashboard")" class="management-card">
                             <div class="management-icon" style="background: linear-gradient(135deg, #1A3C34, #234D43);">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -165,6 +222,35 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Recent Notifications Section -->
+            @if (Model.Notifications != null && Model.Notifications.Count > 0)
+            {
+                <div class="notifications-section">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2 class="section-title">🔔 Recent Notifications</h2>
+                            <a href="@Url.Action("Notifications")" class="view-all-link">View All</a>
+                        </div>
+                        <div class="notifications-content">
+                            @foreach (var notification in Model.Notifications)
+                            {
+                                <div class="notification-item-dashboard @(notification.IsRead ? "read" : "unread")">
+                                    <div class="notification-dot"></div>
+                                    <div class="notification-text">
+                                        <p>@notification.Message</p>
+                                        <span class="notification-time">@notification.CreatedAt.ToString("g")</span>
+                                    </div>
+                                    @if (notification.BookingId != null && notification.BookingId > 0)
+                                    {
+                                        <a href="@Url.Action("Index", "AdminBookings")" class="notification-action">View →</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
 
             <!-- Quick Info Section -->
             <div class="info-section">
@@ -215,3 +301,158 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/signalr@latest/signalr.min.js"></script>
+<script>
+    // Initialize SignalR connection
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/notificationHub")
+        .withAutomaticReconnect()
+        .build();
+
+    connection.on("ReceiveBookingNotification", function (notification) {
+        console.log("Real-time notification received:", notification);
+        
+        // Show notification toast
+        showNotificationToast(notification);
+        
+        // Update the notification badge immediately
+        updateBadgeImmediate();
+        
+        // Add notification to the list if visible
+        addNotificationToList(notification);
+    });
+
+    connection.start().catch(function (err) {
+        return console.error(err);
+    });
+
+    function showNotificationToast(notification) {
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-size: 14px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+            max-width: 350px;
+        `;
+        
+        const itemsList = notification.items && notification.items.length > 0 
+            ? notification.items.join(", ")
+            : "Items";
+        
+        toast.innerHTML = `
+            <div style="font-weight: 600; margin-bottom: 8px;">🔔 New Booking Alert</div>
+            <div>${notification.customerName} - Table (TBA)</div>
+            <div style="font-size: 12px; margin-top: 4px; opacity: 0.9;">${itemsList}</div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Remove after 6 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease-out';
+            setTimeout(() => toast.remove(), 300);
+        }, 6000);
+    }
+
+    function updateBadgeImmediate() {
+        const badge = document.querySelector('[data-notification-badge]');
+        if (badge) {
+            // Get current count
+            let currentCount = parseInt(badge.textContent) || 0;
+            currentCount++;
+            
+            // Update badge
+            badge.textContent = currentCount;
+            badge.style.display = 'flex';
+        } else {
+            // Create badge if it doesn't exist
+            const bellLink = document.querySelector('a[href*="Notifications"]');
+            if (bellLink) {
+                const newBadge = document.createElement('span');
+                newBadge.setAttribute('data-notification-badge', '');
+                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #ff4757; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;';
+                newBadge.textContent = '1';
+                bellLink.style.position = 'relative';
+                bellLink.appendChild(newBadge);
+            }
+        }
+    }
+
+    function addNotificationToList(notification) {
+        // Find the notifications content container
+        let notificationsContent = document.querySelector('.notifications-content');
+
+        // If notifications section isn't present, create it and insert into the dashboard
+        if (!notificationsContent) {
+            const contentGrid = document.querySelector('.content-grid');
+            if (contentGrid) {
+                const notificationsSectionHTML = `
+                    <div class="notifications-section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h2 class="section-title">🔔 Recent Notifications</h2>
+                                <a href="/AdminDashboard/Notifications" class="view-all-link">View All</a>
+                            </div>
+                            <div class="notifications-content"></div>
+                        </div>
+                    </div>
+                `;
+
+                // Insert notifications section at the top of the content grid
+                contentGrid.insertAdjacentHTML('afterbegin', notificationsSectionHTML);
+                notificationsContent = document.querySelector('.notifications-content');
+            }
+        }
+
+        if (!notificationsContent) return; // nothing we can do
+
+        // Create new notification item
+        const newNotificationHTML = `
+            <div class="notification-item-dashboard unread">
+                <div class="notification-dot"></div>
+                <div class="notification-text">
+                    <p>${notification.message || notification.Message}</p>
+                    <span class="notification-time">${new Date().toLocaleString()}</span>
+                </div>
+                ${notification.bookingId || notification.BookingId ? `<a href="/AdminBookings/Index" class="notification-action">View →</a>` : ''}
+            </div>
+        `;
+
+        // Insert at the beginning
+        notificationsContent.insertAdjacentHTML('afterbegin', newNotificationHTML);
+
+        // Keep only 10 notifications visible
+        const items = notificationsContent.querySelectorAll('.notification-item-dashboard');
+        if (items.length > 10) {
+            items[items.length - 1].remove();
+        }
+    }
+
+    function updateNotificationBadge() {
+        // Fetch unread notification count via AJAX
+        fetch('/AdminDashboard/GetUnreadNotificationCount')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.querySelector('[data-notification-badge]');
+                if (badge) {
+                    if (data.unreadCount > 0) {
+                        badge.textContent = data.unreadCount;
+                        badge.style.display = 'flex';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching notification count:', error));
+    }
+</script>

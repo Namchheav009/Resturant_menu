@@ -54,6 +54,38 @@ namespace Resturant_Menu.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("Resturant_Menu.Models.AdminNotification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.ToTable("AdminNotifications");
+                });
+
             modelBuilder.Entity("Resturant_Menu.Models.Booking", b =>
                 {
                     b.Property<int>("Id")
@@ -73,10 +105,16 @@ namespace Resturant_Menu.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("MenuItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TableNumber")
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -85,7 +123,38 @@ namespace Resturant_Menu.Migrations
 
                     b.HasIndex("MenuItemId");
 
+                    b.HasIndex("TableId");
+
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("Resturant_Menu.Models.BookingItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("MenuItemId");
+
+                    b.ToTable("BookingItems");
                 });
 
             modelBuilder.Entity("Resturant_Menu.Models.Category", b =>
@@ -162,6 +231,162 @@ namespace Resturant_Menu.Migrations
                     b.ToTable("MenuItems");
                 });
 
+            modelBuilder.Entity("Resturant_Menu.Models.Table", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tables");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsAvailable = true,
+                            Number = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsAvailable = true,
+                            Number = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsAvailable = true,
+                            Number = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsAvailable = true,
+                            Number = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsAvailable = true,
+                            Number = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsAvailable = true,
+                            Number = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsAvailable = true,
+                            Number = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsAvailable = true,
+                            Number = 8
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsAvailable = true,
+                            Number = 9
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsAvailable = true,
+                            Number = 10
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsAvailable = true,
+                            Number = 11
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsAvailable = true,
+                            Number = 12
+                        },
+                        new
+                        {
+                            Id = 13,
+                            IsAvailable = true,
+                            Number = 13
+                        },
+                        new
+                        {
+                            Id = 14,
+                            IsAvailable = true,
+                            Number = 14
+                        },
+                        new
+                        {
+                            Id = 15,
+                            IsAvailable = true,
+                            Number = 15
+                        },
+                        new
+                        {
+                            Id = 16,
+                            IsAvailable = true,
+                            Number = 16
+                        },
+                        new
+                        {
+                            Id = 17,
+                            IsAvailable = true,
+                            Number = 17
+                        },
+                        new
+                        {
+                            Id = 18,
+                            IsAvailable = true,
+                            Number = 18
+                        },
+                        new
+                        {
+                            Id = 19,
+                            IsAvailable = true,
+                            Number = 19
+                        },
+                        new
+                        {
+                            Id = 20,
+                            IsAvailable = true,
+                            Number = 20
+                        },
+                        new
+                        {
+                            Id = 21,
+                            IsAvailable = true,
+                            Number = 21
+                        });
+                });
+
+            modelBuilder.Entity("Resturant_Menu.Models.AdminNotification", b =>
+                {
+                    b.HasOne("Resturant_Menu.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId");
+
+                    b.Navigation("Booking");
+                });
+
             modelBuilder.Entity("Resturant_Menu.Models.Booking", b =>
                 {
                     b.HasOne("Resturant_Menu.Models.Customer", "Customer")
@@ -174,7 +399,34 @@ namespace Resturant_Menu.Migrations
                         .WithMany()
                         .HasForeignKey("MenuItemId");
 
+                    b.HasOne("Resturant_Menu.Models.Table", "Table")
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("MenuItem");
+
+                    b.Navigation("Table");
+                });
+
+            modelBuilder.Entity("Resturant_Menu.Models.BookingItem", b =>
+                {
+                    b.HasOne("Resturant_Menu.Models.Booking", "Booking")
+                        .WithMany("BookingItems")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Resturant_Menu.Models.MenuItem", "MenuItem")
+                        .WithMany()
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
 
                     b.Navigation("MenuItem");
                 });
@@ -188,6 +440,11 @@ namespace Resturant_Menu.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Resturant_Menu.Models.Booking", b =>
+                {
+                    b.Navigation("BookingItems");
                 });
 
             modelBuilder.Entity("Resturant_Menu.Models.Category", b =>

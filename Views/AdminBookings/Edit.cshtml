@@ -1,0 +1,192 @@
+@model Booking
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<link rel="stylesheet" href="~/css/dashboard/menuitem.css" asp-append-version="true" />
+
+<div class="manage-wrapper">
+    <div class="manage-container" style="max-width: 600px;">
+        <!-- Header -->
+        <div class="manage-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <a href="@Url.Action("Index", "AdminBookings")" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Back to Bookings</span>
+                    </a>
+                    <h1 class="page-title">Edit Booking #@Model.Id</h1>
+                    <p class="page-subtitle">Update booking details</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <form method="post" class="edit-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="form-group">
+                <label for="customerName" class="form-label">Customer Name *</label>
+                <input type="text" id="customerName" name="customerName" value="@Model.CustomerName" 
+                       class="form-input" required placeholder="Enter customer name" />
+            </div>
+
+            <div class="form-group">
+                <label for="tableId" class="form-label">Table *</label>
+                <select id="tableId" name="tableId" class="form-input" required>
+                    <option value="">-- Select a Table --</option>
+                    @foreach (var table in ViewBag.Tables)
+                    {
+                        if (Model.TableId == table.Id)
+                        {
+                            <option value="@table.Id" selected>Table @table.Number</option>
+                        }
+                        else
+                        {
+                            <option value="@table.Id">Table @table.Number</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Booked Date</label>
+                <input type="text" value="@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")" 
+                       class="form-input" disabled placeholder="Date cannot be changed" />
+                <small style="color: #999; margin-top: 4px; display: block;">Booking date cannot be modified</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Items</label>
+                <div style="padding: 12px; background: #f5f5f5; border-radius: 6px;">
+                    @if (Model.BookingItems?.Count > 0)
+                    {
+                        <ul style="margin: 0; padding-left: 20px;">
+                            @foreach (var item in Model.BookingItems)
+                            {
+                                <li style="color: black;">@(item.MenuItem?.Name ?? "Unknown") (Qty: @item.Quantity)</li>
+                                
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p style="margin: 0; color: #999;">No items in this booking</p>
+                    }
+                </div>
+                <small style="color: #999; margin-top: 4px; display: block;">Items cannot be modified</small>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                <button type="submit" class="btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 8px;">
+                        <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                    </svg>
+                    Save Changes
+                </button>
+                <a href="@Url.Action("Index", "AdminBookings")" class="btn-cancel">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 8px;">
+                        <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
+                    </svg>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .edit-form {
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-input:disabled {
+        background: #f5f5f5;
+        cursor: not-allowed;
+        color: #999;
+    }
+
+    .form-error {
+        color: #d32f2f;
+        font-size: 12px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .btn-primary {
+        flex: 1;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        padding: 12px 24px;
+        background: #f0f0f0;
+        color: #333;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background: #e0e0e0;
+        border-color: #ccc;
+    }
+</style>

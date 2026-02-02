@@ -23,15 +23,68 @@ namespace Resturant_Menu.Controllers
             if (HttpContext.Session.GetString("AdminUsername") == null)
                 return RedirectToAction("Login", "AdminAccount");
 
+            // Get recent notifications (show up to 10 on dashboard)
+            var unreadNotifications = _db.AdminNotifications
+                .Where(n => !n.IsRead)
+                .OrderByDescending(n => n.CreatedAt)
+                .Take(20)
+                .ToList();
+
             var stats = new
             {
                 TotalBookings = _db.Bookings.Count(),
                 TotalMenuItems = _db.MenuItems.Count(),
                 TotalCategories = _db.Categories.Count(),
-                TotalAdmins = _db.Admins.Count()
+                TotalAdmins = _db.Admins.Count(),
+                UnreadNotifications = unreadNotifications.Count,
+                Notifications = unreadNotifications
             };
 
             return View(stats);
+        }
+
+        public IActionResult Notifications()
+        {
+            if (HttpContext.Session.GetString("AdminUsername") == null)
+                return RedirectToAction("Login", "AdminAccount");
+
+            var notifications = _db.AdminNotifications
+                .OrderByDescending(n => n.CreatedAt)
+                .ToList();
+
+            return View(notifications);
+        }
+
+        [HttpPost]
+        public IActionResult MarkNotificationAsRead(int id)
+        {
+            if (HttpContext.Session.GetString("AdminUsername") == null)
+                return RedirectToAction("Login", "AdminAccount");
+
+            var notification = _db.AdminNotifications.FirstOrDefault(n => n.Id == id);
+            if (notification != null)
+            {
+                notification.IsRead = true;
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Notifications");
+        }
+
+        [HttpPost]
+        public IActionResult MarkAllAsRead()
+        {
+            if (HttpContext.Session.GetString("AdminUsername") == null)
+                return RedirectToAction("Login", "AdminAccount");
+
+            var unreadNotifications = _db.AdminNotifications.Where(n => !n.IsRead).ToList();
+            foreach (var notification in unreadNotifications)
+            {
+                notification.IsRead = true;
+            }
+            _db.SaveChanges();
+
+            return RedirectToAction("Notifications");
         }
 
         // Categories CRUD
@@ -176,6 +229,32 @@ namespace Resturant_Menu.Controllers
             return RedirectToAction("MenuItems");
         }
 
+        // Tables Management
+        public IActionResult Tables()
+        {
+            if (HttpContext.Session.GetString("AdminUsername") == null)
+                return RedirectToAction("Login", "AdminAccount");
+
+            var tables = _db.Tables.OrderBy(t => t.Number).ToList();
+            return View(tables);
+        }
+
+        [HttpPost]
+        public IActionResult ToggleTableAvailability(int id)
+        {
+            if (HttpContext.Session.GetString("AdminUsername") == null)
+                return RedirectToAction("Login", "AdminAccount");
+
+            var table = _db.Tables.Find(id);
+            if (table != null)
+            {
+                table.IsAvailable = !table.IsAvailable;
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Tables");
+        }
+
         // Admins CRUD
         public IActionResult Admins()
         {
@@ -272,6 +351,17 @@ namespace Resturant_Menu.Controllers
             {
                 System.IO.File.Delete(filePath);
             }
+        }
+
+        // API endpoint to get unread notification count
+        [HttpGet]
+        public IActionResult GetUnreadNotificationCount()
+        {
+            var unreadCount = _db.AdminNotifications
+                .Where(n => !n.IsRead)
+                .Count();
+            
+            return Json(new { unreadCount });
         }
     }
 }

@@ -584,8 +584,13 @@ D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\lxighb17oi-{0}-jjsuc0puk
 D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\13m9za0tg2-{0}-9vr69e8ynj-9vr69e8ynj.gz
 D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\hdu38o3wst-{0}-hv9912xwn9-hv9912xwn9.gz
 D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\uz5jwhe3hy-{0}-gaowi4qivl-gaowi4qivl.gz
-D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\qydkcvk2cs-{0}-un9kfu19wt-un9kfu19wt.gz
 D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\36kvxnttn0-{0}-ix30hcoz7y-ix30hcoz7y.gz
 D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\8xsf573qw0-{0}-a35no01f2r-a35no01f2r.gz
 D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\s49znop7en-{0}-e22338sg67-e22338sg67.gz
-D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\l7xojszqy4-{0}-b36wft4i7d-b36wft4i7d.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\at4mq8spfa-{0}-vte6doyjz5-vte6doyjz5.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\xbg1ufpn9g-{0}-spxbruqtjs-spxbruqtjs.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\qydkcvk2cs-{0}-fc1c89xzyp-fc1c89xzyp.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\7gcd8dl723-{0}-a8rnniz02t-a8rnniz02t.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\4y9jzqz1tr-{0}-aws46s5ui3-aws46s5ui3.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\tmbb53klle-{0}-gmhzxra756-gmhzxra756.gz
+D:\test-asp\Resturant_menu\obj\Debug\net10.0\compressed\ixoeytd7pn-{0}-5sstyho40d-5sstyho40d.gz

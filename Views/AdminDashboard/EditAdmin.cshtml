@@ -8,27 +8,46 @@
 
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card card-ui">
+            <div class="card card-ui shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Admin Details</h5>
+                </div>
                 <div class="card-body">
-                    <form method="post">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+                    <form method="post" novalidate>
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@Model.Id" />
+
                         <div class="mb-3">
-                            <label class="form-label">Username</label>
-                            <input name="Username" class="form-control input-ui" value="@Model.Username" required />
+                            <label class="form-label" for="Username">Username</label>
+                            <input id="Username" name="Username" class="form-control input-ui" value="@Model.Username" required />
+                            @Html.ValidationMessage("Username", null, new { @class = "text-danger" })
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input name="Password" type="password" class="form-control input-ui" value="@Model.Password" required />
+                            <label class="form-label" for="Password">Password</label>
+                            <input id="Password" name="Password" type="password" class="form-control input-ui" placeholder="Leave blank to keep current password" />
+                            <small class="form-text text-muted">Leave blank to keep the existing password.</small>
+                            @Html.ValidationMessage("Password", null, new { @class = "text-danger" })
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input name="FullName" class="form-control input-ui" value="@Model.FullName" required />
+                            <label class="form-label" for="FullName">Full Name</label>
+                            <input id="FullName" name="FullName" class="form-control input-ui" value="@Model.FullName" required />
+                            @Html.ValidationMessage("FullName", null, new { @class = "text-danger" })
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input name="Email" type="email" class="form-control input-ui" value="@Model.Email" />
+                            <label class="form-label" for="Email">Email</label>
+                            <input id="Email" name="Email" type="email" class="form-control input-ui" value="@Model.Email" />
+                            @Html.ValidationMessage("Email", null, new { @class = "text-danger" })
                         </div>
-                        <button class="btn btn-primary w-100">Update</button>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill">Update Admin</button>
+                            <a href="@Url.Action("Admins", "AdminDashboard")" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+
                     </form>
                 </div>
             </div>

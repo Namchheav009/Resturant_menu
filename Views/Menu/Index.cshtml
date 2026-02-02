@@ -2,189 +2,131 @@
 @{
     ViewData["Title"] = "Menu";
 }
+<link rel="stylesheet" href="~/css/Menu/menu.css" asp-append-version="true" />
 
-<div class="menu-page">
-    <div class="container py-5">
-        <!-- Header Section -->
-        <div class="menu-header text-center mb-5">
-            <h1 class="display-4 fw-bold mb-3">Our Menu</h1>
-            <p class="text-muted lead">Discover our delicious selection</p>
+<div class="menu-wrapper">
+    <!-- Hero Section -->
+    <div class="menu-hero">
+        <div class="hero-background">
+            <div class="hero-pattern"></div>
+            <div class="hero-overlay"></div>
         </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 2L9.5 6.5H14L10.5 9.5L12 14L8 11L4 14L5.5 9.5L2 6.5H6.5L8 2Z" fill="currentColor"/>
+                </svg>
+                <span>Golden Leaf Restaurant</span>
+            </div>
+            <h1 class="hero-title">Our Menu</h1>
+            <p class="hero-subtitle">Explore our carefully curated selection of dishes, crafted with passion and the finest ingredients</p>
+        </div>
+    </div>
 
-        <!-- Menu Grid -->
-        <div class="row g-4">
-            @foreach (var item in Model)
-            {
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                    <a class="menu-card text-decoration-none d-block h-100"
-                       asp-controller="Menu"
-                       asp-action="Details"
-                       asp-route-id="@item.Id">
-                        <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                            <!-- Image Section -->
-                            <div class="menu-card-image position-relative">
-                                @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
-                                {
-                                    <img src="@item.ImageUrl" 
-                                         alt="@item.Name" 
-                                         class="card-img-top"
-                                         style="height: 220px; object-fit: cover;" />
-                                }
-                                else
-                                {
-                                    <div class="image-placeholder d-flex align-items-center justify-content-center bg-light" 
-                                         style="height: 220px;">
-                                        <div class="text-center text-muted">
-                                            <i class="bi bi-image fs-1 mb-2"></i>
-                                            <p class="mb-0 small">No Image Available</p>
-                                        </div>
-                                    </div>
-                                }
-                                <div class="card-overlay"></div>
-                            </div>
+    <!-- Menu Container -->
+    <div class="menu-container">
+        @if (Model != null && Model.Any())
+        {
+            <!-- Category Filter (if you want to add categories later) -->
+            <div class="menu-filters">
+                <div class="filter-info">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 4H17M3 8H17M3 12H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>@Model.Count dish@(Model.Count != 1 ? "es" : "") available</span>
+                </div>
+            </div>
 
-                            <!-- Content Section -->
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-semibold mb-2">@item.Name</h5>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    @if (!string.IsNullOrWhiteSpace(item.Description))
-                                    {
-                                        @(item.Description.Length > 80 ? item.Description.Substring(0, 80) + "..." : item.Description)
-                                    }
-                                    else
-                                    {
-                                        <span class="fst-italic">No description available</span>
-                                    }
-                                </p>
-                                <div class="mt-auto pt-2">
-                                    <span class="view-details">
-                                        View Details <i class="bi bi-arrow-right ms-1"></i>
-                                    </span>
+            <!-- Menu Grid -->
+            <div class="menu-grid">
+                @foreach (var item in Model)
+                {
+                    <a href="@Url.Action("Details", "Menu", new { id = item.Id })" class="menu-item-card">
+                        <div class="item-image-wrapper">
+                            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" class="item-image" />
+                            }
+                            else
+                            {
+                                <div class="item-image-placeholder">
+                                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                                        <rect x="12" y="16" width="40" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                                        <circle cx="22" cy="26" r="4" fill="currentColor"/>
+                                        <path d="M12 40L22 30L30 38L42 26L52 36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
                                 </div>
+                            }
+                            <div class="item-overlay">
+                                <span class="view-details-btn">
+                                    View Details
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M5 3L11 8L5 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </span>
                             </div>
+                            @if (!item.IsAvailable)
+                            {
+                                <div class="unavailable-badge">
+                                    <span>Unavailable</span>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="item-content">
+                            <div class="item-header">
+                                <h3 class="item-name">@item.Name</h3>
+                                <span class="item-price">$@item.Price.ToString("F2")</span>
+                            </div>
+                            
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <p class="item-description">
+                                    @(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)
+                                </p>
+                            }
+                            
+                            @if (!string.IsNullOrWhiteSpace(item.Category?.Name))
+                            {
+                                <div class="item-category">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <rect x="2" y="2" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                                        <rect x="8" y="2" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                                        <rect x="2" y="8" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                                        <rect x="8" y="8" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
+                                    <span>@item.Category.Name</span>
+                                </div>
+                            }
                         </div>
                     </a>
-                </div>
-            }
-        </div>
-
-        @if (Model == null || !Model.Any())
+                }
+            </div>
+        }
+        else
         {
-            <div class="text-center py-5">
-                <div class="mb-4">
-                    <i class="bi bi-inbox fs-1 text-muted"></i>
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="3" stroke-dasharray="8 8"/>
+                        <path d="M35 45C35 45 40 40 50 40C60 40 65 45 65 45M42 62C42 62 45 58 50 58C55 58 58 62 58 62" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="40" cy="50" r="3" fill="currentColor"/>
+                        <circle cx="60" cy="50" r="3" fill="currentColor"/>
+                    </svg>
                 </div>
-                <h3 class="text-muted">No Menu Items Available</h3>
-                <p class="text-muted">Check back soon for delicious options!</p>
+                <h2 class="empty-title">Menu Coming Soon</h2>
+                <p class="empty-description">We're crafting something special for you. Check back soon to discover our delicious offerings!</p>
             </div>
         }
     </div>
-</div>
 
-<style>
-    .menu-page {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        min-height: 100vh;
-    }
-
-    .menu-header h1 {
-        color: #2c3e50;
-        position: relative;
-        display: inline-block;
-    }
-
-    .menu-header h1::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        border-radius: 2px;
-    }
-
-    .menu-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        color: inherit;
-    }
-
-    .menu-card:hover {
-        transform: translateY(-8px);
-    }
-
-    .menu-card .card {
-        transition: all 0.3s ease;
-        border-radius: 12px;
-    }
-
-    .menu-card:hover .card {
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .menu-card-image {
-        overflow: hidden;
-    }
-
-    .menu-card-image img {
-        transition: transform 0.4s ease;
-    }
-
-    .menu-card:hover .menu-card-image img {
-        transform: scale(1.1);
-    }
-
-    .card-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .menu-card:hover .card-overlay {
-        opacity: 1;
-    }
-
-    .card-title {
-        color: #2c3e50;
-        font-size: 1.1rem;
-    }
-
-    .view-details {
-        color: #667eea;
-        font-weight: 500;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-        display: inline-block;
-    }
-
-    .menu-card:hover .view-details {
-        color: #764ba2;
-        transform: translateX(4px);
-    }
-
-    .image-placeholder {
-        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-    }
-
-    .image-placeholder i {
-        opacity: 0.3;
-    }
-
-    /* Responsive adjustments */
-    @@media (max-width: 768px) {
-        .menu-header h1 {
-            font-size: 2rem;
-        }
-        
-        .menu-card-image img,
-        .image-placeholder {
-            height: 180px !important;
-        }
-    }
-</style>
+    <!-- Call to Action Section -->
+    <div class="menu-cta">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Dine?</h2>
+            <p class="cta-description">Reserve your table and experience our exceptional cuisine</p>
+         
+        </div>
+    </div>
+    </div>

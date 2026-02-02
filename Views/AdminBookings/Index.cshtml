@@ -1,39 +1,207 @@
 ﻿@model List<Booking>
 @{
-    ViewData["Title"] = "All Transactions";
+    ViewData["Title"] = "Manage Bookings";
 }
 
-<div class="container mt-4">
-    <div class="card card-ui">
-        <div class="card-body">
-            <h4 class="card-title">All Transactions (Bookings)</h4>
-            <p class="text-muted">Only admin can view this page.</p>
+<link rel="stylesheet" href="~/css/dashboard/menuitem.css" asp-append-version="true" />
 
-            <div class="table-responsive">
-                <table class="table table-dark table-striped">
+<div class="manage-wrapper">
+    <div class="manage-container">
+        <!-- Header -->
+        <div class="manage-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <a href="@Url.Action("Index", "AdminDashboard")" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <h1 class="page-title">Bookings Management</h1>
+                    <p class="page-subtitle">View and manage all customer reservations</p>
+                </div>
+                <a href="@Url.Action("Archived", "AdminBookings")" class="btn-view-archived">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 6H17M8 10V14M12 10V14M3 6L4 16C4 16.5304 4.21071 17.0391 4.58579 17.4142C4.96086 17.7893 5.46957 18 6 18H14C14.5304 18 15.0391 17.7893 15.4142 17.4142C15.7893 17.0391 16 16.5304 16 16L17 6M7 6V4C7 3.73478 7.10536 3.48043 7.29289 3.29289C7.48043 3.10536 7.73478 3 8 3H12C12.2652 3 12.5196 3.10536 12.7071 3.29289C12.8946 3.48043 13 3.73478 13 4V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>View Archived</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="3" y="4" width="14" height="12" rx="1" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 8H17" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count</span>
+                    <span class="stat-label">Total Bookings</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count</span>
+                    <span class="stat-label">Active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Table -->
+        @if (Model.Any())
+        {
+            <div style="overflow-x: auto; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Customer</th>
-                            <th>Table</th>
-                            <th>Menu Item</th>
-                            <th>Time</th>
+                        <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-bottom: 2px solid #555;">
+                            <th style="padding: 16px; text-align: left; font-weight: 600;">ID</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600;">Customer</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600;">Table</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600;">Items</th>
+                            <th style="padding: 16px; text-align: left; font-weight: 600;">Booked On</th>
+                            <th style="padding: 16px; text-align: center; font-weight: 600;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var b in Model)
-                    {
-                        <tr>
-                            <td>@b.Id</td>
-                            <td>@b.CustomerName</td>
-                            <td>@b.TableNumber</td>
-                            <td>@(b.MenuItem?.Name ?? "-")</td>
-                            <td>@b.CreatedAt.ToString("g")</td>
-                        </tr>
-                    }
+                        @foreach (var booking in Model)
+                        {
+                            <tr style="border-bottom: 1px solid #eee; transition: background-color 0.3s ease;">
+                                <td style="padding: 12px 16px; font-weight: 600; color: #667eea;">@booking.Id</td>
+                                <td style="padding: 12px 16px;">@booking.CustomerName</td>
+                                <td style="padding: 12px 16px;">
+                                    <span style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                        Table @(booking.Table != null ? booking.Table.Number.ToString() : "-")
+                                    </span>
+                                </td>
+                                <td style="padding: 12px 16px; white-space: normal;">
+                                    <!-- DEBUG: BookingItems count=@(booking.BookingItems?.Count ?? 0), MenuItem.Name=@booking.MenuItem?.Name -->
+                                    @if (booking.BookingItems != null && booking.BookingItems.Count > 0)
+                                    {
+                                        <ul style="margin:0; padding-left:18px;">
+                                            @foreach (var bi in booking.BookingItems)
+                                            {
+                                                <li style="color: #000;">@(bi.MenuItem?.Name ?? "Unknown") (Qty: @bi.Quantity)</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else if (booking.MenuItem != null && !string.IsNullOrEmpty(booking.MenuItem.Name))
+                                    {
+                                        <small>@booking.MenuItem.Name</small>
+                                    }
+                                    else
+                                    {
+                                        <small style="color:#ccc;">- no items -</small>
+                                    }
+                                </td>
+                                <td style="padding: 12px 16px; color: #666; font-size: 13px;">@booking.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td style="padding: 12px 16px; text-align: center;">
+                                    <div style="display: flex; gap: 8px; justify-content: center;">
+                                        <a href="@Url.Action("Edit", "AdminBookings", new { id = booking.Id })" class="btn-action-small btn-edit" title="Edit booking">
+                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                                <path d="M2 17.5V19H3.5L14.81 7.69L13.31 6.19L2 17.5Z" fill="currentColor"/>
+                                                <path d="M19.71 5.04C20.1 4.65 20.1 4.02 19.71 3.63L16.37 0.29C15.98 -0.1 15.35 -0.1 14.96 0.29L12.13 3.12L15.88 6.87L19.71 5.04Z" fill="currentColor"/>
+                                            </svg>
+                                        </a>
+                                        <form method="post" action="@Url.Action("Delete", "AdminBookings")" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this booking? It will be moved to archives.');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@booking.Id" />
+                                            <button type="submit" class="btn-action-small btn-delete" title="Delete booking">
+                                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M4 6H6H16M7 9V14C7 14.5304 7.21071 15.0391 7.58579 15.4142C7.96086 15.7893 8.46957 16 9 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V9M9 11V13M11 11V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M3 6H17L15.7 18.1C15.5933 19.0504 15.1402 19.9161 14.4151 20.5485C13.6899 21.1809 12.7432 21.5 11.773 21.5H9.227C8.25684 21.5 7.31011 21.1809 6.58493 20.5485C5.85975 19.9161 5.40672 19.0504 5.3 18.1L3 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M8 6V3C8 2.73478 8.10536 2.48043 8.29289 2.29289C8.48043 2.10536 8.73478 2 9 2H11C11.2652 2 11.5196 2.10536 11.7071 2.29289C11.8946 2.48043 12 2.73478 12 3V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
-        </div>
+        }
+        else
+        {
+            <div style="text-align: center; padding: 60px 20px; color: #999;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style="margin: 0 auto 20px; opacity: 0.5;">
+                    <path d="M3 6H21M3 10H21M3 14H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <p style="font-size: 16px;">No bookings found</p>
+            </div>
+        }
     </div>
 </div>
+
+<style>
+    .btn-view-archived {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-view-archived:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-action-small {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f0f0f0;
+        color: #333;
+    }
+
+    .btn-action-small:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-edit {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .btn-edit:hover {
+        background: #bbdefb;
+    }
+
+    .btn-delete {
+        background: #ffebee;
+        color: #d32f2f;
+    }
+
+    .btn-delete:hover {
+        background: #ffcdd2;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+</style>

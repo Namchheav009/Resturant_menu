@@ -9,8 +9,11 @@ namespace Resturant_Menu.Models
         [Required, MaxLength(80)]
         public string CustomerName { get; set; } = "";
 
-        [Required, Range(1, 500)]
-        public int TableNumber { get; set; }
+        // Foreign key to Table (1..21)
+        [Required]
+        public int TableId { get; set; }
+
+        public Table? Table { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
@@ -19,8 +22,12 @@ namespace Resturant_Menu.Models
 
         public int CustomerId { get; set; }
         public Customer? Customer { get; set; }
+
+        // Navigation property for cart items
+        public ICollection<BookingItem> BookingItems { get; set; } = new List<BookingItem>();
+
+        // Soft delete flag
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
-
-
-
 }

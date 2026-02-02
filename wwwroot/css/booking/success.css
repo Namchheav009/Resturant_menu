@@ -1,0 +1,369 @@
+/* Success Page Styles */
+
+.success-wrapper {
+    min-height: 100vh;
+    background: #f5f5f0;
+    padding: 2rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Success Card */
+.success-card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Success Icon */
+.success-icon-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+}
+
+.success-icon {
+    position: relative;
+    z-index: 2;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e5a4c;
+    border-radius: 50%;
+    animation: successPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.success-icon svg {
+    stroke: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.success-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #1e5a4c;
+    opacity: 0.3;
+    animation: pulse 2s ease-out infinite;
+}
+
+@keyframes successPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Success Content */
+.success-content {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.success-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.success-subtitle {
+    font-size: 1.125rem;
+    color: #718096;
+    margin: 0;
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Booking Details */
+.booking-details {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #fafaf8;
+    border-radius: 12px;
+    border: 1px solid #e8e8e0;
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+    background: #f5f5f0;
+    border-color: #d4d4c8;
+    transform: translateX(4px);
+}
+
+.detail-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f3e8;
+    border-radius: 12px;
+    color: #d4a574;
+}
+
+.detail-icon svg {
+    fill: #d4a574;
+}
+
+.detail-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 1.125rem;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+/* Info Banner */
+.info-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: #fffbf0;
+    border-radius: 12px;
+    border: 1px solid #f9eed7;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.info-banner svg {
+    flex-shrink: 0;
+    fill: #d4a574;
+}
+
+.info-banner span {
+    font-size: 0.9375rem;
+    color: #5a4a2a;
+    font-weight: 500;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background: #1e5a4c;
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(30, 90, 76, 0.3);
+    background: #194a3f;
+    color: white;
+}
+
+.btn-primary svg {
+    stroke: white;
+}
+
+.btn-secondary {
+    background: white;
+    color: #1e5a4c;
+    border-color: #e8e8e0;
+}
+
+.btn-secondary:hover {
+    background: #fafaf8;
+    border-color: #1e5a4c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: #1e5a4c;
+}
+
+.btn-secondary svg {
+    stroke: #1e5a4c;
+}
+
+/* Success Features */
+.success-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    animation: fadeInUp 0.6s ease-out 0.7s both;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card svg {
+    margin-bottom: 1rem;
+    stroke: #d4a574;
+}
+
+.feature-card h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+    font-size: 0.9375rem;
+    color: #718096;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .success-wrapper {
+        padding: 1rem;
+    }
+
+    .success-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .success-title {
+        font-size: 1.75rem;
+    }
+
+    .success-subtitle {
+        font-size: 1rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .detail-item {
+        padding: 1rem;
+    }
+
+    .detail-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .detail-value {
+        font-size: 1rem;
+    }
+
+    .success-features {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .success-icon-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+
+    .success-icon,
+    .success-pulse {
+        width: 100px;
+        height: 100px;
+    }
+
+    .success-icon svg {
+        width: 60px;
+        height: 60px;
+    }
+
+    .success-title {
+        font-size: 1.5rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem 1rem;
+    }
+}

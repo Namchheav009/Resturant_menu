@@ -1,0 +1,291 @@
+@model List<AdminNotification>
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<style>
+    .notifications-wrapper {
+        min-height: 80vh;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .notifications-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .notifications-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        color: white;
+    }
+
+    .notifications-header h1 {
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-mark-all {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid white;
+    }
+
+    .btn-mark-all:hover {
+        background: white;
+        color: #667eea;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid white;
+    }
+
+    .btn-back:hover {
+        background: white;
+        color: #667eea;
+    }
+
+    .notifications-list {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .notification-item {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        transition: background 0.3s;
+    }
+
+    .notification-item:hover {
+        background: #f9f9f9;
+    }
+
+    .notification-item:last-child {
+        border-bottom: none;
+    }
+
+    .notification-item.unread {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+    }
+
+    .notification-item.unread:hover {
+        background: #e8ecff;
+    }
+
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 20px;
+    }
+
+    .notification-icon.booking {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .notification-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notification-message {
+        color: #333;
+        margin-bottom: 5px;
+        word-break: break-word;
+    }
+
+    .notification-time {
+        font-size: 0.85rem;
+        color: #999;
+    }
+
+    .notification-actions {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .notification-actions form {
+        margin: 0;
+    }
+
+    .btn-read {
+        background: #667eea;
+        color: white;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .btn-read:hover {
+        background: #5568d3;
+    }
+
+    .btn-read.marked {
+        background: #4caf50;
+    }
+
+    .btn-read.marked:hover {
+        background: #45a049;
+    }
+
+    .empty-notifications {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+
+    .empty-notifications svg {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .notification-badge {
+        display: inline-block;
+        background: #ff4757;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        margin-left: 10px;
+    }
+
+    @@media (max-width: 768px) {
+        .notifications-header {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .notification-item {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notification-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .btn-read {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="notifications-wrapper">
+    <div class="notifications-container">
+        <div class="notifications-header">
+            <div>
+                <h1>🔔 Notifications
+                    @{
+                        var unreadCount = Model.Count(n => !n.IsRead);
+                        if (unreadCount > 0)
+                        {
+                            <span class="notification-badge">@unreadCount new</span>
+                        }
+                    }
+                </h1>
+            </div>
+            <div class="header-actions">
+                @if (Model.Any(n => !n.IsRead))
+                {
+                    <form method="post" action="@Url.Action("MarkAllAsRead")" style="display: inline;">
+                        <button type="submit" class="btn btn-mark-all">Mark All as Read</button>
+                    </form>
+                }
+                <a href="@Url.Action("Index")" class="btn btn-back">← Back to Dashboard</a>
+            </div>
+        </div>
+
+        <div class="notifications-list">
+            @if (!Model.Any())
+            {
+                <div class="empty-notifications">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <h3>No notifications yet</h3>
+                    <p>All notifications will appear here</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var notification in Model)
+                {
+                    <div class="notification-item @(notification.IsRead ? "" : "unread")">
+                        <div class="notification-icon booking">
+                            📋
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-message">
+                                @notification.Message
+                            </div>
+                            <div class="notification-time">
+                                @notification.CreatedAt.ToString("g") (@(DateTime.Now.Subtract(notification.CreatedAt).TotalMinutes < 1 ? "now" : DateTime.Now.Subtract(notification.CreatedAt).TotalMinutes < 60 ? $"{Math.Floor(DateTime.Now.Subtract(notification.CreatedAt).TotalMinutes)} min ago" : DateTime.Now.Subtract(notification.CreatedAt).TotalHours < 24 ? $"{Math.Floor(DateTime.Now.Subtract(notification.CreatedAt).TotalHours)} hrs ago" : $"{Math.Floor(DateTime.Now.Subtract(notification.CreatedAt).TotalDays)} days ago"))
+                            </div>
+                        </div>
+                        <div class="notification-actions">
+                            @if (!notification.IsRead)
+                            {
+                                <form method="post" action="@Url.Action("MarkNotificationAsRead", new { id = notification.Id })">
+                                    <button type="submit" class="btn btn-read">Mark as Read</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="btn btn-read marked" style="cursor: default;">✓ Read</div>
+                            }
+                            @if (notification.BookingId != null && notification.BookingId > 0)
+                            {
+                                <a href="@Url.Action("Index", "AdminBookings")" class="btn btn-read" style="background: #4caf50;">View Booking</a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

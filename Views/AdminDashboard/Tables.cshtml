@@ -1,0 +1,169 @@
+@model List<Table>
+@{
+    ViewData["Title"] = "Manage Tables";
+}
+<link rel="stylesheet" href="~/css/dashboard/menuitem.css" asp-append-version="true" />
+
+<div class="manage-wrapper">
+    <div class="manage-container">
+        <!-- Header -->
+        <div class="manage-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <a href="@Url.Action("Index", "AdminDashboard")" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <h1 class="page-title">Restaurant Tables</h1>
+                    <p class="page-subtitle">Manage table availability</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 4H17M3 8H17M3 12H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count</span>
+                    <span class="stat-label">Total Tables</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count(x => x.IsAvailable)</span>
+                    <span class="stat-label">Available</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Count(x => !x.IsAvailable)</span>
+                    <span class="stat-label">Unavailable</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Grid -->
+        @if (Model.Any())
+        {
+            <div class="items-grid">
+                @foreach (var table in Model)
+                {
+                    <div class="menu-item-card @(!table.IsAvailable ? "unavailable" : "")">
+                        <div class="item-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center; color: white;">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style="margin-bottom: 8px;">
+                                    <rect x="3" y="3" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="13" y="3" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="3" y="13" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="13" y="13" width="8" height="8" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span style="font-size: 28px; font-weight: bold;">Table @table.Number</span>
+                            </div>
+                        </div>
+
+                        <div class="item-content">
+                            <div class="item-header">
+                                <h3 class="item-name">Table @table.Number</h3>
+                                <span class="status-badge @(table.IsAvailable ? "available" : "unavailable")">
+                                    @(table.IsAvailable ? "Available" : "Unavailable")
+                                </span>
+                            </div>
+
+                            <p class="item-description">
+                                @(table.IsAvailable ? "This table is available for bookings" : "This table is currently unavailable")
+                            </p>
+
+                            <div class="item-actions">
+                                <form method="post" action="@Url.Action("ToggleTableAvailability", "AdminDashboard")" style="display: inline;">
+                                    <input type="hidden" name="id" value="@table.Id" />
+                                    <button type="submit" class="btn-action btn-toggle">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                            <path d="M3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        <span>@(table.IsAvailable ? "Mark Unavailable" : "Mark Available")</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div style="text-align: center; padding: 40px 20px; color: #666;">
+                <p>No tables found</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-badge.available {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-badge.unavailable {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-toggle {
+        background-color: #667eea;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-toggle:hover {
+        background-color: #5568d3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .menu-item-card.unavailable {
+        opacity: 0.8;
+        border: 2px dashed #ccc;
+    }
+
+    .menu-item-card.unavailable .item-image {
+        filter: grayscale(30%);
+    }
+</style>

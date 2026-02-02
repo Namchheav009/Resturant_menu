@@ -10,12 +10,26 @@ namespace Resturant_Menu.Controllers
 
         public MenuController(ApplicationDbContext db) => _db = db;
 
-        public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? categoryId)
         {
             var items = await _db.MenuItems
                 .Where(m => m.IsAvailable)
-                .OrderBy(m => m.Name)
+                .Include(m => m.Category)
                 .ToListAsync();
+
+            // Filter by category if provided
+            if (categoryId.HasValue)
+            {
+                items = items.Where(m => m.CategoryId == categoryId.Value).ToList();
+            }
+
+            items = items.OrderBy(m => m.Name).ToList();
+
+            // Get all categories for filter
+            var categories = await _db.Categories.OrderBy(c => c.Name).ToListAsync();
+
+            ViewBag.Categories = categories;
+            ViewBag.SelectedCategoryId = categoryId;
 
             return View(items);
         }

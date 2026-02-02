@@ -154,12 +154,16 @@
                         <div class="form-group">
                             <div class="checkbox-wrapper">
                                 <input 
+                                    type="hidden" 
+                                    id="IsAvailableHidden"
+                                    name="IsAvailable" 
+                                    value="@(Model.IsAvailable ? "true" : "false")" />
+                                <input 
                                     type="checkbox" 
                                     id="IsAvailable"
-                                    name="IsAvailable" 
                                     class="form-checkbox" 
-                                    value="true" 
-                                    checked="@Model.IsAvailable" />
+                                    @(Model.IsAvailable ? "checked" : "")
+                                    onchange="document.getElementById('IsAvailableHidden').value = this.checked ? 'true' : 'false';" />
                                 <label for="IsAvailable" class="checkbox-label">
                                     <span class="checkbox-box">
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

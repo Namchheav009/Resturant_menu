@@ -17,6 +17,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
+// Telegram service
+builder.Services.AddHttpClient<Resturant_Menu.Services.ITelegramService, Resturant_Menu.Services.TelegramService>();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {

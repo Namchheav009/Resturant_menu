@@ -110,7 +110,7 @@ namespace Resturant_Menu.Controllers
             if (!IsAdminLoggedIn())
                 return RedirectToAction("Login", "AdminAccount");
 
-            var booking = await _db.Bookings.FindAsync(id);
+            var booking = await _db.Bookings.Include(b => b.Table).FirstOrDefaultAsync(b => b.Id == id);
             if (booking == null || booking.IsDeleted)
                 return NotFound();
 
@@ -119,6 +119,14 @@ namespace Resturant_Menu.Controllers
             booking.DeletedAt = DateTime.Now;
 
             _db.Bookings.Update(booking);
+
+            // Make the table available again
+            if (booking.Table != null)
+            {
+                booking.Table.IsAvailable = true;
+                _db.Tables.Update(booking.Table);
+            }
+
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

@@ -27,8 +27,28 @@
     <div class="menu-container">
         @if (Model != null && Model.Any())
         {
-            <!-- Category Filter (if you want to add categories later) -->
+            <!-- Category Filter -->
             <div class="menu-filters">
+                <div class="filter-section">
+                    <div class="filter-label">Filter by Category:</div>
+                    <div class="category-buttons">
+                        <a href="@Url.Action("Index", "Menu")" 
+                           class="category-btn @(ViewBag.SelectedCategoryId == null ? "active" : "")">
+                            All Categories
+                        </a>
+                        @if (ViewBag.Categories != null)
+                        {
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <a href="@Url.Action("Index", "Menu", new { categoryId = category.Id })"
+                                   class="category-btn @(ViewBag.SelectedCategoryId == category.Id ? "active" : "")">
+                                    @category.Name
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+
                 <div class="filter-info">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M3 4H17M3 8H17M3 12H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>

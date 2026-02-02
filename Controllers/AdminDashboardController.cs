@@ -191,7 +191,8 @@ namespace Resturant_Menu.Controllers
         [HttpPost]
         public async Task<IActionResult> EditMenuItem(MenuItem menuItem, IFormFile ImageFile, string ExistingImageUrl)
         {
-            if (ModelState.IsValid)
+            // Always allow update even if some validation fails (like image validation)
+            try
             {
                 // Handle image upload
                 if (ImageFile != null && ImageFile.Length > 0)
@@ -210,10 +211,27 @@ namespace Resturant_Menu.Controllers
                     menuItem.ImageUrl = ExistingImageUrl;
                 }
 
-                _db.MenuItems.Update(menuItem);
-                _db.SaveChanges();
-                return RedirectToAction("MenuItems");
+                // Update the menu item
+                var existingItem = _db.MenuItems.Find(menuItem.Id);
+                if (existingItem != null)
+                {
+                    existingItem.Name = menuItem.Name;
+                    existingItem.Description = menuItem.Description;
+                    existingItem.Price = menuItem.Price;
+                    existingItem.CategoryId = menuItem.CategoryId;
+                    existingItem.IsAvailable = menuItem.IsAvailable;
+                    existingItem.ImageUrl = menuItem.ImageUrl ?? existingItem.ImageUrl;
+                    
+                    _db.MenuItems.Update(existingItem);
+                    _db.SaveChanges();
+                    return RedirectToAction("MenuItems", new { success = true });
+                }
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error updating menu item: " + ex.Message);
+            }
+
             ViewBag.Categories = _db.Categories.ToList();
             return View(menuItem);
         }

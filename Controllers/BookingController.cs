@@ -13,11 +13,13 @@ namespace Resturant_Menu.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly Resturant_Menu.Services.ITelegramService _telegramService;
 
-        public BookingController (ApplicationDbContext db, IHubContext<NotificationHub> hubContext)
+        public BookingController (ApplicationDbContext db, IHubContext<NotificationHub> hubContext, Resturant_Menu.Services.ITelegramService telegramService)
         {
             _db = db;
             _hubContext = hubContext;
+            _telegramService = telegramService;
         }
 
         [HttpGet]
@@ -74,9 +76,9 @@ namespace Resturant_Menu.Controllers
         public class CartItemDetail
         {
             public int MenuItemId { get; set; }
-            public string Name { get; set; }
+            public string? Name { get; set; }
             public decimal Price { get; set; }
-            public string ImageUrl { get; set; }
+            public string? ImageUrl { get; set; }
             public int Quantity { get; set; }
 
             public decimal Subtotal => Price * Quantity;
@@ -178,6 +180,28 @@ namespace Resturant_Menu.Controllers
                 TableNumber = tableNumberForMsg,
                 CreatedAt = DateTime.Now
             });
+
+            // Send Telegram notification (best-effort, do not block booking on failure)
+            try
+            {
+                var telegramMsg = notification.Message + $" (Booking ID: {booking.Id})";
+
+                // collect all images from booked menu items
+                var allImages = _db.BookingItems
+                    .Where(bi => bi.BookingId == booking.Id)
+                    .Include(bi => bi.MenuItem)
+                    .Select(bi => bi.MenuItem!.ImageUrl)
+                    .Where(url => !string.IsNullOrWhiteSpace(url))
+                    .Distinct()
+                    .OfType<string>()
+                    .ToList();
+
+                await _telegramService.SendBookingNotificationAsync(telegramMsg, allImages);
+            }
+            catch
+            {
+                // ignore errors
+            }
 
             // Clear the cart after successful booking
             HttpContext.Session.Remove("cart");

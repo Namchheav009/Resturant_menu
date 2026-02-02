@@ -4,6 +4,18 @@
 }
 <link rel="stylesheet" href="~/css/dashboard/menuitem.css" asp-append-version="true" />
 
+<script>
+    // Show success alert if redirected from update
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            alert('✓ Menu item updated successfully!');
+            // Remove the parameter from URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
+</script>
+
 <div class="manage-wrapper">
     <div class="manage-container">
         <!-- Header -->

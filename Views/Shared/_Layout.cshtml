@@ -23,7 +23,8 @@
                 {
                     <span class="badge bg-light text-dark rounded-pill px-3">Hello, @adminName</span>
                     <a class="btn btn-danger btn-sm rounded-pill px-3"
-                       asp-controller="AdminAccount" asp-action="Logout">Logout</a>
+                       asp-controller="AdminAccount" asp-action="Logout"
+                       onclick="return confirm('Are you sure you want to logout?');">Logout</a>
                 }
                 else
                 {
